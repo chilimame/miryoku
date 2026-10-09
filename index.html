@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>わたしの魅力診断</title>
+<style>
+:root{--bg:#faf6ef;--card:#fffdf8;--ink:#3b3a4a;--sub:#7a7684;--line:#e4dccd;--a:#b9777e;--b:#5f8a9a;--c:#c98a4b;--d:#6f8f6a;--e:#8c78a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1c24;--card:#26252f;--ink:#ece8df;--sub:#a9a5b3;--line:#3a3946;--a:#d99aa0;--b:#86b0c0;--c:#e0a96f;--d:#93b48d;--e:#b5a0cf}}
+:root[data-theme="dark"]{--bg:#1d1c24;--card:#26252f;--ink:#ece8df;--sub:#a9a5b3;--line:#3a3946;--a:#d99aa0;--b:#86b0c0;--c:#e0a96f;--d:#93b48d;--e:#b5a0cf}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Serif JP","Hiragino Mincho ProN","Yu Mincho",serif;line-height:1.9}
+.wrap{max-width:520px;margin:0 auto;padding:28px 20px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 22px;text-align:center}
+h1{font-size:1.5rem;font-weight:500;margin:.4em 0;letter-spacing:.08em}
+h2{font-size:1.35rem;font-weight:500;margin:.3em 0}
+p{margin:.6em 0}.sub{color:var(--sub);font-size:.88rem}
+.ico{width:110px;height:110px;margin:0 auto}.ico svg{width:100%;height:100%}
+button{font:inherit;cursor:pointer;color:var(--ink)}
+.btn{background:var(--ink);color:var(--bg);border:0;border-radius:99px;padding:12px 30px;margin-top:14px;letter-spacing:.1em}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line);margin:14px 4px 0}
+.opt{display:block;width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;margin:10px 0;text-align:center}
+.opt:hover,.opt:focus-visible{border-color:var(--ink)}
+.bar{height:2px;background:var(--line);margin-bottom:22px}.bar i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.q{font-size:1.1rem;min-height:4.2em;margin:.2em 0 1em}
+.row{display:flex;align-items:center;gap:10px;font-size:.85rem;margin:6px 0;text-align:left}
+.row b{width:5.5em;font-weight:400}.row span{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}.row span i{display:block;height:100%}
+.step{border-top:1px dashed var(--line);margin-top:18px;padding-top:14px}
+details{margin-top:22px;font-size:.9rem}summary{cursor:pointer;color:var(--sub);text-align:center}
+.li{padding:8px 0;border-bottom:1px solid var(--line)}.li.me{background:rgba(140,120,168,.12)}
+</style></head><body><div class="wrap" id="app"></div>
+<script>
+const D=[["寄り添う力","--a"],["探る力","--b"],["踏み出す力","--c"],["積み重ねる力","--d"],["彩る力","--e"]];
+const Q=["誰かが困っていると、つい気にかけてしまう。","「なぜ？」が気になって、つい調べてしまう。","やると決めたら、まず動いてみる方だ。","一度引き受けたことは、最後までやり切りたい。","自分なりの工夫や好みを、形にするのが好きだ。","相手の気持ちの変化に、わりと気づく。","知らない分野でも、面白そうなら飛び込める。","迷っている人には「まずやってみよう」と言いたくなる。","地味な作業でも、コツコツ続けるのは苦ではない。","話し方や見せ方で、場の雰囲気が変わることがある。","人の話は、口を挟まず最後まで聞くことが多い。","物事を、いろいろな角度から考えるのが好きだ。","難しい状況でも、次の一手を考えるとワクワクする。","約束や期限は、自然と守る方だ。","「あなたらしいね」と言われることがある。"];
+const P={
+AB:["深く聴く灯り","話した人が「わかってもらえた」と感じる、静かな安心感の持ち主。","受け止める温かさと知りたい気持ちが合わさり、相手の本音に自然と届きます。","最近気になる人に、「最近どう？」の先をひとつ聞いてみる。"],
+AC:["背中を押す人","「大丈夫、やってみよう」が似合う人。","気持ちに寄り添いながら、行動へ送り出せる。迷っている人にとって心強い存在です。","迷っている誰かに「まず一歩だけ」と声をかけてみる。"],
+AD:["静かな支え手","目立たなくても、いないと困る存在。","気づかいと誠実さで、周りの土台をそっと支えています。その積み重ねが信頼になります。","支えてきたことを、今日ひとつ数えて自分に伝える。"],
+AE:["場をほぐす人","あなたがいると、空気がやわらかくなる。","思いやりと表現力で、張りつめた場をなごませる力があります。","心地よいと感じた空間の工夫を、ひとつ真似してみる。"],
+BA:["理解したがり屋","「あなたのことが知りたい」が自然に出てくる人。","探究心が人に向くと、深い理解と共感になります。相手の世界を広げる聞き手です。","興味のある人の好きなものを、ひとつ調べてみる。"],
+BC:["切り拓く探検家","未知の場所へ、軽やかに踏み出せる人。","好奇心と行動力の組み合わせで、新しい道を自分で見つけられます。","ずっと気になっていることを、小さく試す日を決める。"],
+BD:["腰を据えた研究者","気になったことを、納得いくまで深められる人。","探究心と粘り強さで、時間をかけて本物の知識や技を育てます。","いま育てているテーマを、1行でメモに残す。"],
+BE:["ひらめきの人","ふとした発想が、人をワクワクさせる。","広い視点と感性が結びつき、独自のアイデアが生まれます。","思いついたことを、今週ひとり誰かに話してみる。"],
+CA:["頼れる旗振り役","「一緒にやろう」が言える人。","行動力と思いやりで、周りを巻き込みながら前へ進めます。","頼りにしている人へ、感謝を一言伝える。"],
+CB:["道を見つける先導者","動きながら考え、最適な道を探せる人。","行動力に探究心が加わり、状況を読んで進路を修正できます。","いま進めていることの次の一手を、3分で書き出す。"],
+CD:["約束を果たす人","言ったことは、ちゃんと形にする。","決断の速さと誠実さが揃い、周囲から厚い信頼を得られます。","果たした約束をひとつ、自分で認めてあげる。"],
+CE:["空気を動かす人","あなたが動くと、場が熱を帯びる。","行動力と表現力で、人の心にも火を灯せます。","熱量を向けたいことに、今日10分だけ使う。"],
+DA:["信頼の根っこ","変わらずそこにいてくれる安心感。","誠実さとやさしさで、長い付き合いほど信頼が深まる人です。","長く続く関係の誰かに、近況を送ってみる。"],
+DB:["丁寧な職人","細部まで手を抜かない、確かな目。","継続する力と探究心が、質の高い仕事や技につながります。","仕上がりに、自分で「いいね」と言ってみる。"],
+DC:["着実な実行者","やると決めたことを、前に進め続ける。","積み重ねと行動力で、気づけば大きな成果を形にしています。","続けていることの日数や回数を、数えてみる。"],
+DE:["味わいを育てる人","時間をかけて、その人らしさを磨く。","継続する力と感性が合わさり、深みのある魅力が育ちます。","好きなことに、今日も少しだけ触れる。"],
+EA:["心をほどく表現者","言葉や雰囲気で、人の心をふっと軽くする。","表現力と思いやりで、相手が自分らしくいられる場をつくれます。","感じたことを、誰かにそのまま言葉で伝える。"],
+EB:["発想を編む人","ばらばらの面白さを、ひとつの形にする。","表現力と探究心で、独自の視点を作品や言葉にできます。","最近の「いいな」を3つ書き出してみる。"],
+EC:["熱を伝える人","好きなことを語る姿が、人を惹きつける。","表現力と行動力で、自分の想いを人に届けられます。","伝えたい想いを、ひとことで誰かに話してみる。"],
+ED:["磨き続ける表現者","自分らしさを、時間をかけて深める人。","感性と継続する力で、あなたらしい味わいを育てています。","過去の自分の言葉や作品を見返して、成長を探す。"]};
+const S=['<g>'+[0,72,144,216,288].map(r=>`<ellipse cx="50" cy="30" rx="9" ry="16" transform="rotate(${r} 50 50)"/>`).join('')+'<circle cx="50" cy="50" r="5"/></g>','<circle cx="50" cy="50" r="34"/><polygon points="50,22 57,50 50,78 43,50"/><circle cx="50" cy="50" r="3"/>','<path d="M50 18V72M50 24L78 62H50M50 36L30 62H50M24 78Q50 90 76 78"/>','<path d="M50 82V40M50 58Q28 54 26 34Q46 36 50 58M50 46Q72 42 74 22Q54 26 50 46M30 82H70"/>','<path d="M50 16Q54 46 84 50Q54 54 50 84Q46 54 16 50Q46 46 50 16Z"/>'];
+const ico=(i,w)=>`<div class="ico" style="color:var(${D[i][1]});${w?`width:${w}px;height:${w}px`:''}"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">${S[i]}</svg></div>`;
+const L=["そう思う","ややそう思う","あまり思わない","思わない"],V=[3,2,1,0];
+let n=0,sc=[0,0,0,0,0],key="";
+const $=document.getElementById("app");
+function start(){n=0;sc=[0,0,0,0,0];$.innerHTML=`<div class="card"><div class="ico" style="color:var(--e)"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">${S[4]}</svg></div><h1>わたしの魅力診断</h1><p>15の問いに、いまの気持ちで答えてください。<br>正解はありません。</p><p class="sub">これはあなたを決めつけるものではなく、<br>いまの自分を映す小さな鏡です。<br>（約2分・20パターン）</p><button class="btn" onclick="ask()">はじめる</button></div>`}
+function ask(){if(n>=Q.length)return done();$.innerHTML=`<div class="bar"><i style="width:${n/Q.length*100}%"></i></div><div class="card"><p class="sub">${n+1} / ${Q.length}</p><p class="q">${Q[n]}</p>${L.map((t,i)=>`<button class="opt" onclick="pick(${i})">${t}</button>`).join('')}</div>`}
+function pick(i){sc[n%5]+=V[i];n++;ask()}
+function done(){const r=[0,1,2,3,4].sort((x,y)=>sc[y]-sc[x]||x-y);key="ABCDE"[r[0]]+"ABCDE"[r[1]];const p=P[key];
+const bars=D.map((d,i)=>`<div class="row"><b>${d[0]}</b><span><i style="width:${sc[i]/9*100}%;background:var(${d[1]})"></i></span></div>`).join('');
+const list=Object.keys(P).map(k=>`<div class="li${k==key?' me':''}"><b>${P[k][0]}</b><br><span class="sub">${P[k][1]}</span></div>`).join('');
+$.innerHTML=`<div class="card"><p class="sub">いまのあなたの魅力は</p>${ico(r[0])}<h2>${p[0]}</h2><p>${p[1]}</p><p class="sub" style="text-align:left">${p[2]}</p><div style="margin-top:18px">${bars}</div><p class="sub" style="text-align:left">5つの力はどれもあなたの中にあります。順位はいまの傾向であり、気分や環境で変わるもの。苦手に感じる面も、これから育てられる余白です。</p><div class="step"><p class="sub">今日からの小さな一歩</p><p>${p[3]}</p></div><button class="btn" onclick="cp()" id="cp">結果をコピー</button><button class="btn ghost" onclick="start()">もう一度</button></div><details><summary>全20パターンを見る</summary>${list}</details>`}
+function cp(){const p=P[key];const t=`【わたしの魅力診断】${p[0]}\n${p[1]}\n${p[2]}\n今日の一歩：${p[3]}`;try{navigator.clipboard.writeText(t).then(()=>{document.getElementById("cp").textContent="コピーしました"})}catch(e){}}
+start();
+</script></body></html>
